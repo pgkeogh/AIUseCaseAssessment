@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Professional tool for evaluating and prioritizing AI use cases"
+    />
+    <title>Agentic AI Use Case Assessment Tool</title>
+    <link rel="stylesheet" href="css/styles.css" />
+  </head>
+  <body>
+    <div class="container">
+      <!-- Header -->
+      <header class="header">
+        <img src="assets/DXC_BIG.png" alt="Company Logo" class="logo" />
+        <h1>AI Use Case Assessment Tool</h1>
+        <p>
+          Evaluate and prioritize your AI initiatives with data-driven insights
+        </p>
+      </header>
+
+      <!-- Navigation -->
+      <nav class="nav-tabs">
+        <button class="nav-tab active" data-tab="entry">📋 Data Entry</button>
+        <button class="nav-tab" data-tab="dashboard">📊 Dashboard</button>
+        <button class="nav-tab" data-tab="matrix">🎯 Priority Matrix</button>
+        <button class="nav-tab" data-tab="export">📤 Export</button>
+      </nav>
+
+      <!-- Main Content -->
+      <main class="content">
+        <!-- Data Entry Tab -->
+        <section id="entry" class="tab-content active">
+          <h2>Use Case Information</h2>
+
+          <form id="useCaseForm">
+            <!-- Descriptive Information -->
+            <div class="form-section">
+              <h3>📋 Descriptive Information</h3>
+
+              <div class="form-group">
+                <label for="useCaseTitle">Use Case Title *</label>
+                <input
+                  type="text"
+                  id="useCaseTitle"
+                  name="useCaseTitle"
+                  required
+                />
+              </div>
+
+              <div class="form-group">
+                <label for="valueChain"
+                  >Value Chain Stage & Sub-Process *</label
+                >
+                <input
+                  type="text"
+                  id="valueChain"
+                  name="valueChain"
+                  placeholder="e.g., Load & Haul -> Dispatch"
+                  required
+                />
+              </div>
+
+              <div class="form-group">
+                <label for="problemStatement">Problem Statement *</label>
+                <textarea
+                  id="problemStatement"
+                  name="problemStatement"
+                  placeholder="A clear, concise description of the pain point or bottleneck..."
+                  required
+                ></textarea>
+              </div>
+
+              <div class="form-group">
+                <label for="rootCause">Root Cause *</label>
+                <textarea
+                  id="rootCause"
+                  name="rootCause"
+                  placeholder="Why does this happen? e.g., Human dispatcher can't track all 50 trucks optimally..."
+                  required
+                ></textarea>
+              </div>
+
+              <div class="form-group">
+                <label for="keyMetrics">Key Metrics (KPIs) Affected *</label>
+                <textarea
+                  id="keyMetrics"
+                  name="keyMetrics"
+                  placeholder="e.g., Truck Queue Time, Shovel Idle Time, Fuel Burn per Ton..."
+                  required
+                ></textarea>
+              </div>
+
+              <div class="form-group">
+                <label for="financialImpact"
+                  >Estimated Annual Financial Impact *</label
+                >
+                <input
+                  type="text"
+                  id="financialImpact"
+                  name="financialImpact"
+                  placeholder="e.g., $2M/year in excess fuel costs"
+                  required
+                />
+              </div>
+
+              <div class="form-group">
+                <label for="regulatory">Regulatory/Privacy Concerns *</label>
+                <textarea
+                  id="regulatory"
+                  name="regulatory"
+                  placeholder="e.g. PII data potentially involved, Aust 13 Privacy Principles, AI Guardrails etc"
+                  required
+                ></textarea>
+              </div>
+
+              <div class="form-group">
+                <label for="dataAvailability"
+                  >Data Source, Availability & Quality *</label
+                >
+                <textarea
+                  id="dataAvailability"
+                  name="dataAvailability"
+                  placeholder="e.g., GPS data exists but only polled every 30 seconds. Quality is good."
+                  required
+                ></textarea>
+              </div>
+
+              <div class="form-group">
+                <label for="potentialSolution"
+                  >Potential AI/Automation Solution *</label
+                >
+                <textarea
+                  id="potentialSolution"
+                  name="potentialSolution"
+                  placeholder="e.g., An agentic AI dispatch system to optimize truck assignments..."
+                  required
+                ></textarea>
+              </div>
+            </div>
+
+            <!-- Scoring Section -->
+            <div class="form-section">
+              <h3>📊 Quantitative Scoring</h3>
+
+              <!-- Business Value Scoring -->
+              <h4>Business Value (1-10 scale)</h4>
+              <div class="scoring-grid business-value">
+                <div class="score-item">
+                  <label for="economicImpact">Economic Impact</label>
+                  <input
+                    type="range"
+                    id="economicImpact"
+                    name="economicImpact"
+                    min="1"
+                    max="10"
+                    value="5"
+                    class="score-slider"
+                  />
+                  <div class="score-display" id="economicImpactDisplay">5</div>
+                </div>
+
+                <div class="score-item">
+                  <label for="sustainabilityImpact"
+                    >Sustainability Impact</label
+                  >
+                  <input
+                    type="range"
+                    id="sustainabilityImpact"
+                    name="sustainabilityImpact"
+                    min="1"
+                    max="10"
+                    value="5"
+                    class="score-slider"
+                  />
+                  <div class="score-display" id="sustainabilityImpactDisplay">
+                    5
+                  </div>
+                </div>
+
+                <div class="score-item">
+                  <label for="strategicAlignment">Strategic Alignment</label>
+                  <input
+                    type="range"
+                    id="strategicAlignment"
+                    name="strategicAlignment"
+                    min="1"
+                    max="10"
+                    value="5"
+                    class="score-slider"
+                  />
+                  <div class="score-display" id="strategicAlignmentDisplay">
+                    5
+                  </div>
+                </div>
+              </div>
+
+              <!-- Implementation Feasibility -->
+              <h4>Implementation Feasibility (1-10 scale)</h4>
+              <div class="scoring-grid implementation">
+                <div class="score-item">
+                  <label for="dataReadiness">Data Readiness</label>
+                  <input
+                    type="range"
+                    id="dataReadiness"
+                    name="dataReadiness"
+                    min="1"
+                    max="10"
+                    value="5"
+                    class="score-slider"
+                  />
+                  <div class="score-display" id="dataReadinessDisplay">5</div>
+                </div>
+
+                <div class="score-item">
+                  <label for="technicalComplexity"
+                    >Technical Complexity (Reverse Scored)</label
+                  >
+                  <input
+                    type="range"
+                    id="technicalComplexity"
+                    name="technicalComplexity"
+                    min="1"
+                    max="10"
+                    value="5"
+                    class="score-slider"
+                  />
+                  <div class="score-display" id="technicalComplexityDisplay">
+                    5
+                  </div>
+                </div>
+
+                <div class="score-item">
+                  <label for="aiSynergy"
+                    >Synergy with Current AI Landscape</label
+                  >
+                  <input
+                    type="range"
+                    id="aiSynergy"
+                    name="aiSynergy"
+                    min="1"
+                    max="10"
+                    value="5"
+                    class="score-slider"
+                  />
+                  <div class="score-display" id="aiSynergyDisplay">5</div>
+                </div>
+
+                <div class="score-item">
+                  <label for="organizationalCapability"
+                    >Organizational Capability</label
+                  >
+                  <input
+                    type="range"
+                    id="organizationalCapability"
+                    name="organizationalCapability"
+                    min="1"
+                    max="10"
+                    value="5"
+                    class="score-slider"
+                  />
+                  <div
+                    class="score-display"
+                    id="organizationalCapabilityDisplay"
+                  >
+                    5
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="estimatedCost"
+                  >Estimated Cost & Time to Implement</label
+                >
+                <textarea
+                  id="estimatedCost"
+                  name="estimatedCost"
+                  placeholder="High-level estimate of investment and timeline for pilot..."
+                ></textarea>
+              </div>
+
+              <!-- Calculated Scores Display -->
+              <div class="calculated-scores">
+                <h4>Calculated Scores</h4>
+                <div class="scores-display">
+                  <div class="score-result">
+                    <div class="score-value" id="totalBusinessValue">5.0</div>
+                    <div class="score-label">Business Value</div>
+                  </div>
+                  <div class="score-result">
+                    <div class="score-value" id="totalFeasibility">5.0</div>
+                    <div class="score-label">Feasibility</div>
+                  </div>
+                  <div class="score-result">
+                    <div class="quadrant-preview" id="quadrantPreview">
+                      Balanced
+                    </div>
+                    <div class="score-label">Priority Quadrant</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Form Actions -->
+            <div class="form-actions">
+              <button type="submit" class="btn btn-primary">
+                💾 Save Use Case
+              </button>
+              <button type="button" class="btn btn-secondary" id="clearFormBtn">
+                🔄 Clear Form
+              </button>
+            </div>
+          </form>
+        </section>
+
+        <!-- Dashboard Tab -->
+        <section id="dashboard" class="tab-content">
+          <h2>📊 Use Cases Dashboard</h2>
+
+          <div class="dashboard-stats">
+            <div class="stat-card">
+              <div class="stat-value" id="totalUseCases">0</div>
+              <div class="stat-label">Total Use Cases</div>
+            </div>
+          </div>
+
+          <div class="dashboard-controls">
+            <select id="sortBy" class="form-control">
+              <option value="priority">Sort by Priority</option>
+              <option value="value">Sort by Business Value</option>
+              <option value="feasibility">Sort by Feasibility</option>
+              <option value="date">Sort by Date Created</option>
+            </select>
+          </div>
+
+          <div id="useCasesList" class="use-case-list">
+            <!-- Use cases will be populated here -->
+          </div>
+        </section>
+
+        <!-- Priority Matrix Tab -->
+        <section id="matrix" class="tab-content">
+          <h2>🎯 Priority Matrix</h2>
+          <p>
+            Use cases plotted by Business Value (Y-axis) vs Implementation
+            Feasibility (X-axis)
+          </p>
+
+          <div class="matrix-container">
+            <div class="quadrant-matrix" id="priorityMatrix">
+              <!-- Quadrant Labels -->
+              <div class="quadrant-label top-left">
+                <strong>Strategic Initiatives</strong><br />
+                <small>High Value, Low Feasibility</small>
+              </div>
+              <div class="quadrant-label top-right">
+                <strong>Quick Wins</strong><br />
+                <small>High Value, High Feasibility</small>
+              </div>
+              <div class="quadrant-label bottom-left">
+                <strong>Deprioritize</strong><br />
+                <small>Low Value, Low Feasibility</small>
+              </div>
+              <div class="quadrant-label bottom-right">
+                <strong>Incremental Improvements</strong><br />
+                <small>Low Value, High Feasibility</small>
+              </div>
+
+              <!-- Axis Lines -->
+              <div class="axis-line horizontal"></div>
+              <div class="axis-line vertical"></div>
+
+              <!-- Axis Labels -->
+              <div class="axis-label x-axis">Implementation Feasibility →</div>
+              <div class="axis-label y-axis">Business Value ↑</div>
+            </div>
+
+            <div class="matrix-legend">
+              <h4>Legend:</h4>
+              <div class="legend-items">
+                <div class="legend-item">
+                  <div class="legend-dot"></div>
+                  <span>Use Case (click to edit)</span>
+                </div>
+                <div class="legend-item">
+                  <div
+                    class="legend-dot"
+                    style="
+                      border: 3px solid white;
+                      box-shadow: 0 0 0 2px var(--primary-color);
+                    "
+                  ></div>
+                  <span>Multiple use cases (hover for details)</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Export Tab -->
+        <section id="export" class="tab-content">
+          <h2>Export Data</h2>
+
+          <div class="export-section">
+            <h3>Summary Reports</h3>
+            <p>Export comprehensive reports with all use cases</p>
+            <div class="export-buttons">
+              <button class="btn btn-primary" id="exportSummaryBtn">
+                📄 Generate Summary Report
+              </button>
+              <button class="btn btn-success" id="exportJson">
+                📋 Export All Data (JSON)
+              </button>
+              <button class="btn btn-info" id="exportCsv">
+                📊 Export Summary (CSV)
+              </button>
+            </div>
+          </div>
+
+          <div class="export-section">
+            <h3>Individual Use Case Reports</h3>
+            <p>Export detailed reports for specific use cases</p>
+            <div id="individualExportList" class="individual-exports">
+              <!-- Individual export options will be populated here -->
+            </div>
+          </div>
+
+          <div class="export-section">
+            <h3>Data Management</h3>
+            <p>Import/Export and backup your data</p>
+            <div class="export-buttons">
+              <input
+                type="file"
+                id="importFile"
+                accept=".json"
+                style="display: none"
+              />
+              <button class="btn btn-secondary" id="importBtn">
+                📥 Import Data
+              </button>
+              <button class="btn btn-danger" id="clearAllBtn">
+                🗑️ Clear All Data
+              </button>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/utils.js"></script>
+    <script src="js/app.js"></script>
+  </body>
+</html>
