@@ -1,4 +1,4 @@
-# Agentic AI Use Case Assessment Tool
+# AI Use Case Assessment Tool
 
 A comprehensive web-based application for evaluating, prioritizing, and managing AI/automation use cases within organizations. This tool helps teams systematically assess potential AI implementations using a structured scoring framework and priority matrix visualization.
 
