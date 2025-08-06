@@ -158,6 +158,7 @@ class UseCaseApp {
    */
   initializeSliders() {
     document.querySelectorAll(".score-slider").forEach((slider) => {
+      slider.value = 0; // Set default to 0
       this.updateScore(slider.id);
     });
     this.calculateTotalScores();
@@ -205,17 +206,16 @@ class UseCaseApp {
    */
   getFormScores() {
     return {
-      economicImpact: document.getElementById("economicImpact")?.value || 5,
-      sustainabilityImpact:
-        document.getElementById("sustainabilityImpact")?.value || 5,
-      strategicAlignment:
-        document.getElementById("strategicAlignment")?.value || 5,
-      dataReadiness: document.getElementById("dataReadiness")?.value || 5,
+      economicImpact: document.getElementById("economicImpact")?.value || 0,
+      hsec: document.getElementById("hsec")?.value || 0,
+      esg: document.getElementById("esg")?.value || 0,
+      productivity: document.getElementById("productivity")?.value || 0,
+      dataReadiness: document.getElementById("dataReadiness")?.value || 0,
       technicalComplexity:
-        document.getElementById("technicalComplexity")?.value || 5,
-      aiSynergy: document.getElementById("aiSynergy")?.value || 5,
-      organizationalCapability:
-        document.getElementById("organizationalCapability")?.value || 5,
+        document.getElementById("technicalComplexity")?.value || 0,
+      aiComplexity: document.getElementById("aiComplexity")?.value || 0,
+      organisationalCapability:
+        document.getElementById("organisationalCapability")?.value || 0,
     };
   }
   /**
@@ -321,15 +321,13 @@ class UseCaseApp {
   getFormData() {
     const fields = [
       "useCaseTitle",
-      "valueChain",
-      "problemStatement",
-      "rootCause",
-      "keyMetrics",
-      "financialImpact",
-      "regulatory",
+      "businessProcess",
+      "painPoints",
+      "opportunities",
+      "piiConsiderations",
       "dataAvailability",
-      "potentialSolution",
-      "estimatedCost",
+      "aiImpact",
+      "additionalInformation",
     ];
 
     const data = {};
@@ -349,14 +347,12 @@ class UseCaseApp {
   validateForm(formData) {
     const required = [
       "useCaseTitle",
-      "valueChain",
-      "problemStatement",
-      "rootCause",
-      "keyMetrics",
-      "financialImpact",
-      "regulatory",
+      "businessProcess",
+      "painPoints",
+      "opportunities",
+      "piiConsiderations",
       "dataAvailability",
-      "potentialSolution",
+      "aiImpact",
     ];
 
     return required.every(
@@ -373,9 +369,9 @@ class UseCaseApp {
       form.reset();
     }
 
-    // Reset sliders to 5
+    // Reset sliders to 0
     document.querySelectorAll(".score-slider").forEach((slider) => {
-      slider.value = 5;
+      slider.value = 0;
       this.updateScore(slider.id);
     });
 
@@ -459,39 +455,39 @@ class UseCaseApp {
       const item = document.createElement("div");
       item.className = "use-case-item";
 
+      // Use new field names, fallback to old ones for backward compatibility
+      const painPoints = useCase.painPoints || useCase.problemStatement || "";
+
       item.innerHTML = `
-      <div class="use-case-header">
-        <div>
-          <div class="use-case-title">${useCase.useCaseTitle}</div>
-          <div class="use-case-meta">
-            <span class="quadrant-badge" style="background: ${getQuadrantColor(
-              useCase.quadrant
-            )}">
-              ${useCase.quadrant || "Not categorized"}
-            </span>
-            Value: ${useCase.businessValue}/10 | Feasibility: ${
+            <div class="use-case-header">
+            <div>
+                <div class="use-case-title">${useCase.useCaseTitle}</div>
+                <div class="use-case-meta">
+                <span class="quadrant-badge" style="background: ${getQuadrantColor(
+                  useCase.quadrant
+                )}">
+                    ${useCase.quadrant || "Not categorized"}
+                </span>
+                Value: ${useCase.businessValue}/5 | Feasibility: ${
         useCase.feasibility
-      }/10
-          </div>
-          <p>${truncateText(useCase.problemStatement, 150)}</p>
-        </div>
-        <div class="use-case-actions">
-          <button class="btn btn-info" onclick="app.editUseCase(${index})">Edit</button>
-          <button class="btn btn-danger" onclick="app.deleteUseCase(${index})">Delete</button>
-        </div>
-      </div>
-    `;
+      }/5
+                </div>
+                <p>${truncateText(painPoints, 150)}</p>
+            </div>
+            <div class="use-case-actions">
+                <button class="btn btn-info" onclick="app.editUseCase(${index})">Edit</button>
+                <button class="btn btn-danger" onclick="app.deleteUseCase(${index})">Delete</button>
+            </div>
+            </div>
+        `;
 
       listElement.appendChild(item);
     });
   }
+  /**
+   * Update matrix visualization
+   */
 
-  /**
-   * Update matrix visualization
-   */
-  /**
-   * Update matrix visualization
-   */
   updateMatrix() {
     const matrix = document.getElementById("priorityMatrix");
     if (!matrix) {
@@ -531,8 +527,8 @@ class UseCaseApp {
       point.className = "matrix-point";
 
       // Calculate base position (convert 1-10 scale to percentage)
-      let x = ((feasibility - 1) / 9) * 100;
-      let y = 100 - ((businessValue - 1) / 9) * 100; // Invert Y axis
+      let x = (feasibility / 5) * 100;
+      let y = 100 - (businessValue / 5) * 100; // Invert Y axis
 
       // Create position key for overlap detection
       const positionKey = `${Math.round(x * 10)}-${Math.round(y * 10)}`;
@@ -577,12 +573,13 @@ class UseCaseApp {
       });
 
       if (overlappingCases.length > 1) {
-        point.title = overlappingCases
+        const tooltipText = overlappingCases
           .map(
             (uc) =>
               `${uc.useCaseTitle} (Value: ${uc.businessValue}, Feasibility: ${uc.feasibility})`
           )
           .join("\n");
+        point.title = tooltipText;
 
         // Add visual indicator for multiple points
         point.style.border = "3px solid #fff";
@@ -596,7 +593,9 @@ class UseCaseApp {
       point.style.top = y + "%";
       point.style.backgroundColor = getQuadrantColor(useCase.quadrant);
 
-      point.addEventListener("click", () => this.editUseCase(index));
+      point.addEventListener("click", () => {
+        this.editUseCase(index);
+      });
 
       matrix.appendChild(point);
       console.log(`✅ Added point for "${useCase.useCaseTitle}"`);
@@ -627,9 +626,9 @@ class UseCaseApp {
       const item = document.createElement("div");
       item.className = "export-item";
       item.innerHTML = `
-        <span>${useCase.useCaseTitle}</span>
-        <button class="btn btn-info" onclick="app.exportUseCase(${index})">Export HTML</button>
-      `;
+            <span>${useCase.useCaseTitle}</span>
+            <button class="btn btn-info" onclick="app.exportUseCase(${index})">Export HTML</button>
+        `;
       listElement.appendChild(item);
     });
   }
@@ -783,37 +782,35 @@ class UseCaseApp {
     <div class="page-break"></div>
     <h2>Detailed Use Cases Overview</h2>
     <table>
-        <thead>
+    <thead>
+        <tr>
+            <th>Use Case</th>
+            <th>Business Process</th>
+            <th>Business Value</th>
+            <th>Feasibility</th>
+            <th>Priority</th>
+        </tr>
+    </thead>
+    <tbody>
+        ${this.useCases
+          .map(
+            (uc) => `
             <tr>
-                <th>Use Case</th>
-                <th>Value Chain</th>
-                <th>Business Value</th>
-                <th>Feasibility</th>
-                <th>Priority</th>
-                <th>Financial Impact</th>
-            </tr>
-        </thead>
-        <tbody>
-            ${this.useCases
-              .map(
-                (uc) => `
-                <tr>
-                    <td><strong>${uc.useCaseTitle}</strong></td>
-                    <td>${uc.valueChain || ""}</td>
-                    <td>${uc.businessValue}</td>
-                    <td>${uc.feasibility}</td>
-                    <td style="background: ${getQuadrantColor(
-                      uc.quadrant
-                    )}20; color: ${getQuadrantColor(uc.quadrant)};">${
+                <td><strong>${uc.useCaseTitle}</strong></td>
+                <td>${uc.businessProcess || uc.valueChain || ""}</td>
+                <td>${uc.businessValue}</td>
+                <td>${uc.feasibility}</td>
+                <td style="background: ${getQuadrantColor(
                   uc.quadrant
-                }</td>
-                    <td>${uc.financialImpact || ""}</td>
-                </tr>
-            `
-              )
-              .join("")}
-        </tbody>
-    </table>
+                )}20; color: ${getQuadrantColor(uc.quadrant)};">${
+              uc.quadrant
+            }</td>
+            </tr>
+        `
+          )
+          .join("")}
+    </tbody>
+</table>
     
     <div class="page-break"></div>
     <h2>Implementation Roadmap Recommendations</h2>
@@ -839,26 +836,25 @@ class UseCaseApp {
           useCases.length
         } use cases)</div>
                         ${useCases
-                          .map(
-                            (uc) => `
+                          .map((uc) => {
+                            // Use new field names, fallback to old ones
+                            const painPoints =
+                              uc.painPoints || uc.problemStatement || "";
+                            return `
                             <div class="use-case-summary" style="border-left-color: ${color};">
                                 <div class="use-case-title">${
                                   uc.useCaseTitle
                                 }</div>
                                 <div class="use-case-scores">Business Value: ${
                                   uc.businessValue
-                                } | Feasibility: ${
-                              uc.feasibility
-                            } | Financial Impact: ${
-                              uc.financialImpact || "Not specified"
-                            }</div>
+                                } | Feasibility: ${uc.feasibility}</div>
                                 <div style="margin-top: 8px; font-size: 13px;">${truncateText(
-                                  uc.problemStatement,
+                                  painPoints,
                                   100
                                 )}</div>
                             </div>
-                        `
-                          )
+                          `;
+                          })
                           .join("")}
                     </div>
                     `;
@@ -966,10 +962,15 @@ class UseCaseApp {
 
     <div class="section">
         <h3>Overview</h3>
-        <p><strong>Value Chain:</strong> ${useCase.valueChain}</p>
-        <p><strong>Problem Statement:</strong> ${useCase.problemStatement}</p>
-        <p><strong>Root Cause:</strong> ${useCase.rootCause}</p>
-        <p><strong>Financial Impact:</strong> ${useCase.financialImpact}</p>
+        <p><strong>Business Process:</strong> ${
+          useCase.businessProcess || useCase.valueChain || ""
+        }</p>
+        <p><strong>Pain Points:</strong> ${
+          useCase.painPoints || useCase.problemStatement || ""
+        }</p>
+        <p><strong>Opportunities:</strong> ${
+          useCase.opportunities || useCase.rootCause || ""
+        }</p>
     </div>
 
     <div class="section">
@@ -993,8 +994,12 @@ class UseCaseApp {
     <div class="section">
         <h3>Implementation Details</h3>
         <p><strong>Data Availability:</strong> ${useCase.dataAvailability}</p>
-        <p><strong>Potential Solution:</strong> ${useCase.potentialSolution}</p>
-        <p><strong>Regulatory Concerns:</strong> ${useCase.regulatory}</p>
+        <p><strong>AI Impact:</strong> ${
+          useCase.aiImpact || useCase.potentialSolution || ""
+        }</p>
+        <p><strong>PII Considerations:</strong> ${
+          useCase.piiConsiderations || useCase.regulatory || ""
+        }</p>
     </div>
 </body>
 </html>`;
@@ -1010,50 +1015,124 @@ class UseCaseApp {
     reader.onload = (e) => {
       try {
         const data = JSON.parse(e.target.result);
+        console.log("📥 Import data received:", data);
 
-        // Handle different import formats
-        let importedUseCases = [];
-        if (Array.isArray(data)) {
-          importedUseCases = data;
-        } else if (data.useCases && Array.isArray(data.useCases)) {
-          importedUseCases = data.useCases;
-        } else {
-          throw new Error("Invalid data format");
+        // Handle both array and object formats
+        let useCases = Array.isArray(data) ? data : data.useCases || [];
+
+        if (!Array.isArray(useCases) || useCases.length === 0) {
+          throw new Error("No valid use cases found in file");
         }
 
-        // Validate imported data
-        const validUseCases = importedUseCases.filter(
-          (uc) => uc.useCaseTitle && uc.problemStatement
-        );
+        // Validate and migrate each use case
+        const validUseCases = [];
+        useCases.forEach((useCase, index) => {
+          console.log(`📋 Processing use case ${index + 1}:`, useCase);
+
+          // Check if it has a title (required field)
+          if (!useCase.useCaseTitle || useCase.useCaseTitle.trim() === "") {
+            console.warn(`⚠️ Skipping use case ${index + 1}: No title`);
+            return;
+          }
+
+          // Migrate old field names to new ones (backward compatibility)
+          const migratedUseCase = this.migrateUseCaseFields(useCase);
+          validUseCases.push(migratedUseCase);
+        });
 
         if (validUseCases.length === 0) {
           throw new Error("No valid use cases found in file");
         }
 
         // Confirm import
-        const confirmMessage = `Import ${validUseCases.length} use cases? This will replace your current data.`;
+        const confirmMessage = `Import ${validUseCases.length} use case(s)? This will replace all existing data.`;
         if (confirm(confirmMessage)) {
           this.useCases = validUseCases;
-          this.saveData();
+          localStorage.setItem("useCases", JSON.stringify(this.useCases));
           this.updateAllViews();
           showAlert(
-            `Successfully imported ${validUseCases.length} use cases!`,
+            `Successfully imported ${validUseCases.length} use case(s)!`,
             "success"
           );
+          console.log("✅ Import completed successfully");
         }
       } catch (error) {
-        console.error("Import error:", error);
-        showAlert(
-          "Error importing data. Please check the file format.",
-          "danger"
-        );
+        console.error("❌ Import error:", error);
+        showAlert(`Import failed: ${error.message}`, "danger");
       }
+
+      // Reset file input
+      event.target.value = "";
     };
 
     reader.readAsText(file);
+  }
 
-    // Reset file input
-    event.target.value = "";
+  /**
+   * Migrate old field names to new field names for backward compatibility
+   */
+  migrateUseCaseFields(useCase) {
+    const migrated = { ...useCase };
+
+    // Field name migrations (old -> new)
+    const fieldMigrations = {
+      valueChain: "businessProcess",
+      problemStatement: "painPoints",
+      rootCause: "opportunities",
+      regulatory: "piiConsiderations",
+      potentialSolution: "aiImpact",
+      estimatedCost: "additionalInformation", // Merge old cost info
+      timeToComplete: "additionalInformation", // Merge old time info
+    };
+
+    // Apply field migrations
+    Object.entries(fieldMigrations).forEach(([oldField, newField]) => {
+      if (useCase[oldField] && !migrated[newField]) {
+        migrated[newField] = useCase[oldField];
+      }
+    });
+
+    // Special handling for additionalInformation - combine old cost and time fields
+    if (useCase.estimatedCost || useCase.timeToComplete) {
+      const additionalParts = [];
+      if (useCase.estimatedCost)
+        additionalParts.push(`Cost: ${useCase.estimatedCost}`);
+      if (useCase.timeToComplete)
+        additionalParts.push(`Time: ${useCase.timeToComplete}`);
+
+      if (additionalParts.length > 0) {
+        const existingAdditional = migrated.additionalInformation || "";
+        migrated.additionalInformation = existingAdditional
+          ? `${existingAdditional}\n\n${additionalParts.join(", ")}`
+          : additionalParts.join(", ");
+      }
+    }
+
+    // Ensure required fields have defaults
+    const requiredDefaults = {
+      useCaseTitle: migrated.useCaseTitle || "Untitled Use Case",
+      businessProcess: migrated.businessProcess || "",
+      painPoints: migrated.painPoints || "",
+      opportunities: migrated.opportunities || "",
+      piiConsiderations: migrated.piiConsiderations || "",
+      dataAvailability: migrated.dataAvailability || "",
+      aiImpact: migrated.aiImpact || "",
+      additionalInformation: migrated.additionalInformation || "",
+      businessValue: migrated.businessValue || 0,
+      feasibility: migrated.feasibility || 0,
+      quadrant: migrated.quadrant || "Deprioritize",
+      timestamp: migrated.timestamp || new Date().toISOString(),
+    };
+
+    // Apply defaults for missing fields
+    Object.entries(requiredDefaults).forEach(([field, defaultValue]) => {
+      if (!migrated[field]) {
+        migrated[field] = defaultValue;
+      }
+    });
+
+    console.log("🔄 Migrated use case:", migrated);
+    return migrated;
   }
 
   /**

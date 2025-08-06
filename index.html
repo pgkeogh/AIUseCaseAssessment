@@ -51,66 +51,41 @@
               </div>
 
               <div class="form-group">
-                <label for="valueChain"
-                  >Value Chain Stage & Sub-Process *</label
-                >
+                <label for="businessProcess">Business Process *</label>
                 <input
                   type="text"
-                  id="valueChain"
-                  name="valueChain"
+                  id="businessProcess"
+                  name="businessProcess"
                   placeholder="e.g., Load & Haul -> Dispatch"
                   required
                 />
               </div>
 
               <div class="form-group">
-                <label for="problemStatement">Problem Statement *</label>
+                <label for="painPoints">Pain Points *</label>
                 <textarea
-                  id="problemStatement"
-                  name="problemStatement"
+                  id="painPoints"
+                  name="painPoints"
                   placeholder="A clear, concise description of the pain point or bottleneck..."
                   required
                 ></textarea>
               </div>
 
               <div class="form-group">
-                <label for="rootCause">Root Cause *</label>
+                <label for="opportunities">Opportunities *</label>
                 <textarea
-                  id="rootCause"
-                  name="rootCause"
-                  placeholder="Why does this happen? e.g., Human dispatcher can't track all 50 trucks optimally..."
+                  id="opportunities"
+                  name="opportunities"
+                  placeholder="What opportunities exist to improve this process? e.g., Human dispatcher can't track all 50 trucks optimally..."
                   required
                 ></textarea>
               </div>
 
               <div class="form-group">
-                <label for="keyMetrics">Key Metrics (KPIs) Affected *</label>
+                <label for="piiConsiderations">PII Considerations *</label>
                 <textarea
-                  id="keyMetrics"
-                  name="keyMetrics"
-                  placeholder="e.g., Truck Queue Time, Shovel Idle Time, Fuel Burn per Ton..."
-                  required
-                ></textarea>
-              </div>
-
-              <div class="form-group">
-                <label for="financialImpact"
-                  >Estimated Annual Financial Impact *</label
-                >
-                <input
-                  type="text"
-                  id="financialImpact"
-                  name="financialImpact"
-                  placeholder="e.g., $2M/year in excess fuel costs"
-                  required
-                />
-              </div>
-
-              <div class="form-group">
-                <label for="regulatory">Regulatory/Privacy Concerns *</label>
-                <textarea
-                  id="regulatory"
-                  name="regulatory"
+                  id="piiConsiderations"
+                  name="piiConsiderations"
                   placeholder="e.g. PII data potentially involved, Aust 13 Privacy Principles, AI Guardrails etc"
                   required
                 ></textarea>
@@ -129,177 +104,175 @@
               </div>
 
               <div class="form-group">
-                <label for="potentialSolution"
-                  >Potential AI/Automation Solution *</label
-                >
+                <label for="aiImpact">AI Impact *</label>
                 <textarea
-                  id="potentialSolution"
-                  name="potentialSolution"
+                  id="aiImpact"
+                  name="aiImpact"
                   placeholder="e.g., An agentic AI dispatch system to optimize truck assignments..."
                   required
                 ></textarea>
               </div>
             </div>
 
-            <!-- Scoring Section -->
+            <!-- Quantitative Scoring -->
             <div class="form-section">
               <h3>📊 Quantitative Scoring</h3>
+              <p>Rate each factor from 0 (lowest) to 5 (highest)</p>
 
-              <!-- Business Value Scoring -->
-              <h4>Business Value (1-10 scale)</h4>
-              <div class="scoring-grid business-value">
+              <h4>Business Value Components</h4>
+              <div class="scoring-grid">
                 <div class="score-item">
                   <label for="economicImpact">Economic Impact</label>
                   <input
                     type="range"
                     id="economicImpact"
-                    name="economicImpact"
-                    min="1"
-                    max="10"
-                    value="5"
                     class="score-slider"
+                    min="0"
+                    max="5"
+                    value="0"
+                    step="1"
                   />
-                  <div class="score-display" id="economicImpactDisplay">5</div>
+                  <div class="score-display" id="economicImpactDisplay">0</div>
                 </div>
-
                 <div class="score-item">
-                  <label for="sustainabilityImpact"
-                    >Sustainability Impact</label
-                  >
+                  <label for="hsec">HSEC</label>
                   <input
                     type="range"
-                    id="sustainabilityImpact"
-                    name="sustainabilityImpact"
-                    min="1"
-                    max="10"
-                    value="5"
+                    id="hsec"
                     class="score-slider"
+                    min="0"
+                    max="5"
+                    value="0"
+                    step="1"
                   />
-                  <div class="score-display" id="sustainabilityImpactDisplay">
-                    5
-                  </div>
+                  <div class="score-display" id="hsecDisplay">0</div>
                 </div>
-
                 <div class="score-item">
-                  <label for="strategicAlignment">Strategic Alignment</label>
+                  <label for="esg">ESG</label>
                   <input
                     type="range"
-                    id="strategicAlignment"
-                    name="strategicAlignment"
-                    min="1"
-                    max="10"
-                    value="5"
+                    id="esg"
                     class="score-slider"
+                    min="0"
+                    max="5"
+                    value="0"
+                    step="1"
                   />
-                  <div class="score-display" id="strategicAlignmentDisplay">
-                    5
-                  </div>
+                  <div class="score-display" id="esgDisplay">0</div>
+                </div>
+                <div class="score-item">
+                  <label for="productivity">Productivity</label>
+                  <input
+                    type="range"
+                    id="productivity"
+                    class="score-slider"
+                    min="0"
+                    max="5"
+                    value="0"
+                    step="1"
+                  />
+                  <div class="score-display" id="productivityDisplay">0</div>
                 </div>
               </div>
 
-              <!-- Implementation Feasibility -->
-              <h4>Implementation Feasibility (1-10 scale)</h4>
-              <div class="scoring-grid implementation">
+              <h4>Implementation Feasibility Components</h4>
+              <div class="scoring-grid">
                 <div class="score-item">
                   <label for="dataReadiness">Data Readiness</label>
                   <input
                     type="range"
                     id="dataReadiness"
-                    name="dataReadiness"
-                    min="1"
-                    max="10"
-                    value="5"
                     class="score-slider"
+                    min="0"
+                    max="5"
+                    value="0"
+                    step="1"
                   />
-                  <div class="score-display" id="dataReadinessDisplay">5</div>
+                  <div class="score-display" id="dataReadinessDisplay">0</div>
                 </div>
-
                 <div class="score-item">
-                  <label for="technicalComplexity"
-                    >Technical Complexity (Reverse Scored)</label
-                  >
+                  <label for="technicalComplexity">Technical Complexity</label>
                   <input
                     type="range"
                     id="technicalComplexity"
-                    name="technicalComplexity"
-                    min="1"
-                    max="10"
-                    value="5"
                     class="score-slider"
+                    min="0"
+                    max="5"
+                    value="0"
+                    step="1"
                   />
                   <div class="score-display" id="technicalComplexityDisplay">
-                    5
+                    0
                   </div>
                 </div>
-
                 <div class="score-item">
-                  <label for="aiSynergy"
-                    >Synergy with Current AI Landscape</label
-                  >
+                  <label for="aiComplexity">AI Complexity</label>
                   <input
                     type="range"
-                    id="aiSynergy"
-                    name="aiSynergy"
-                    min="1"
-                    max="10"
-                    value="5"
+                    id="aiComplexity"
                     class="score-slider"
+                    min="0"
+                    max="5"
+                    value="0"
+                    step="1"
                   />
-                  <div class="score-display" id="aiSynergyDisplay">5</div>
+                  <div class="score-display" id="aiComplexityDisplay">0</div>
                 </div>
-
                 <div class="score-item">
-                  <label for="organizationalCapability"
-                    >Organizational Capability</label
+                  <label for="organisationalCapability"
+                    >Organisational Capability Readiness</label
                   >
                   <input
                     type="range"
-                    id="organizationalCapability"
-                    name="organizationalCapability"
-                    min="1"
-                    max="10"
-                    value="5"
+                    id="organisationalCapability"
                     class="score-slider"
+                    min="0"
+                    max="5"
+                    value="0"
+                    step="1"
                   />
                   <div
                     class="score-display"
-                    id="organizationalCapabilityDisplay"
+                    id="organisationalCapabilityDisplay"
                   >
-                    5
+                    0
                   </div>
                 </div>
               </div>
 
-              <div class="form-group">
-                <label for="estimatedCost"
-                  >Estimated Cost & Time to Implement</label
-                >
-                <textarea
-                  id="estimatedCost"
-                  name="estimatedCost"
-                  placeholder="High-level estimate of investment and timeline for pilot..."
-                ></textarea>
-              </div>
-
-              <!-- Calculated Scores Display -->
               <div class="calculated-scores">
                 <h4>Calculated Scores</h4>
                 <div class="scores-display">
                   <div class="score-result">
-                    <div class="score-value" id="totalBusinessValue">5.0</div>
+                    <div class="score-value" id="totalBusinessValue">0.0</div>
                     <div class="score-label">Business Value</div>
                   </div>
                   <div class="score-result">
-                    <div class="score-value" id="totalFeasibility">5.0</div>
-                    <div class="score-label">Feasibility</div>
-                  </div>
-                  <div class="score-result">
-                    <div class="quadrant-preview" id="quadrantPreview">
-                      Balanced
-                    </div>
-                    <div class="score-label">Priority Quadrant</div>
+                    <div class="score-value" id="totalFeasibility">0.0</div>
+                    <div class="score-label">Implementation Feasibility</div>
                   </div>
                 </div>
+                <div style="text-align: center; margin-top: 15px">
+                  <span class="quadrant-preview" id="quadrantPreview"
+                    >Deprioritize</span
+                  >
+                </div>
+              </div>
+            </div>
+
+            <!-- Other Information -->
+            <div class="form-section">
+              <h3>ℹ️ Other Information</h3>
+
+              <div class="form-group">
+                <label for="additionalInformation"
+                  >Additional Information</label
+                >
+                <textarea
+                  id="additionalInformation"
+                  name="additionalInformation"
+                  placeholder="Any additional notes, considerations, or context..."
+                ></textarea>
               </div>
             </div>
 

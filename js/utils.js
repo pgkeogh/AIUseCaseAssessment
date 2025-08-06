@@ -47,12 +47,13 @@ function downloadFile(content, filename, contentType) {
 
 // Score calculations
 function calculateBusinessValue(scores) {
-  const { economicImpact, sustainabilityImpact, strategicAlignment } = scores;
+  const { economicImpact, hsec, esg, productivity } = scores;
   const total =
-    (parseInt(economicImpact || 5) +
-      parseInt(sustainabilityImpact || 5) +
-      parseInt(strategicAlignment || 5)) /
-    3;
+    (parseInt(economicImpact || 0) +
+      parseInt(hsec || 0) +
+      parseInt(esg || 0) +
+      parseInt(productivity || 0)) /
+    4;
   return parseFloat(total.toFixed(1));
 }
 
@@ -60,26 +61,27 @@ function calculateFeasibility(scores) {
   const {
     dataReadiness,
     technicalComplexity,
-    aiSynergy,
-    organizationalCapability,
+    aiComplexity,
+    organisationalCapability,
   } = scores;
 
-  // Technical complexity is reverse scored
-  const reversedComplexity = 11 - parseInt(technicalComplexity || 5);
+  // Technical and AI complexity are reverse scored (higher complexity = lower feasibility)
+  const reversedTechnicalComplexity = 5 - parseInt(technicalComplexity || 0);
+  const reversedAiComplexity = 5 - parseInt(aiComplexity || 0);
 
   const total =
-    (parseInt(dataReadiness || 5) +
-      reversedComplexity +
-      parseInt(aiSynergy || 5) +
-      parseInt(organizationalCapability || 5)) /
+    (parseInt(dataReadiness || 0) +
+      reversedTechnicalComplexity +
+      reversedAiComplexity +
+      parseInt(organisationalCapability || 0)) /
     4;
 
   return parseFloat(total.toFixed(1));
 }
 
-// Quadrant determination
+// Quadrant determination (updated thresholds for 0-5 scale)
 function getQuadrant(businessValue, feasibility) {
-  const threshold = 5.5;
+  const threshold = 2.5; // Middle of 0-5 scale
 
   if (businessValue >= threshold && feasibility >= threshold) {
     return "Quick Wins";
@@ -128,12 +130,11 @@ function truncateText(text, length = 100) {
 function generateCSV(useCases) {
   const headers = [
     "Title",
-    "Value Chain",
-    "Problem Statement",
+    "Business Process",
+    "Pain Points",
     "Business Value",
     "Feasibility",
     "Quadrant",
-    "Financial Impact",
     "Created Date",
   ];
 
@@ -142,12 +143,11 @@ function generateCSV(useCases) {
   useCases.forEach((useCase) => {
     const row = [
       `"${useCase.useCaseTitle || ""}"`,
-      `"${useCase.valueChain || ""}"`,
-      `"${(useCase.problemStatement || "").replace(/"/g, '""')}"`,
+      `"${useCase.businessProcess || ""}"`,
+      `"${(useCase.painPoints || "").replace(/"/g, '""')}"`,
       useCase.businessValue || "",
       useCase.feasibility || "",
       `"${useCase.quadrant || ""}"`,
-      `"${useCase.financialImpact || ""}"`,
       `"${formatDate(useCase.timestamp)}"`,
     ];
     csv += row.join(",") + "\n";
